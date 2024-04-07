@@ -15,12 +15,13 @@ const ChatAI = () => {
       };
 
       try {
-        const response = await axios.post("/api/chat", { message });
+        const response = await generateAnswer();
+        console.log(response)
         setMessages([
           ...messages,
           message,
           {
-            text: response.data.text,
+            text: response,
             username: "AI",
             timestamp: new Date().toLocaleTimeString(),
           },
@@ -33,6 +34,23 @@ const ChatAI = () => {
       }
     }
   };
+
+  const generateAnswer = async () => {
+    const response = await axios(
+      {
+        url:"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyCCqxW8b7yEL5Y6jougbcGkVTRWsL5lixY",
+        method: "post",
+        data: {
+          contents: [
+            {parts: [{ text: newMessage}]},
+          ],
+        },
+      }
+    );
+    // console.log(response['data']['candidates'][0]['content']['parts'][0]['text']);
+   return(response['data']['candidates'][0]['content']['parts'][0]['text']);
+
+  }
 
   return (
     <div className="chat-container">
