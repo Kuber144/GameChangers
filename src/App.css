@@ -124,18 +124,18 @@ footer a:hover {
     margin-top: 10px;
 }
 
-
-
 .leaveBtn {
     width: 100%;
     margin-top: 20px;
 }
+
 .CodeMirror {
     min-height: calc(100vh - 20px);
     font-size: 20px;
     line-height: 1.6;
     padding-top: 20px;
 }
+
 /* Chat container styles */
 .chat-container {
     width: auto; /* Let the width be determined by content */
@@ -399,3 +399,71 @@ footer a:hover {
     color: #777;
   }
   
+
+  /* Assuming the CodeMirror component is placed in the middle column of the layout */
+.middle-column {
+  overflow-x: auto; /* Enable horizontal scrolling */
+  display: flex;
+  flex-direction: column;
+}
+
+/* Adjust the height of the CodeMirror component */
+.CodeMirror {
+  min-height: calc(100vh - 20px); /* Adjust as needed */
+  font-size: 20px;
+  line-height: 1.6;
+  padding-top: 20px;
+}
+
+/* Button and dropdown container */
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Add some margin between the buttons and dropdown */
+}
+
+/* Dropdown container */
+.dropdown-container {
+  width: 30%; /* Adjust the width as needed */
+}
+
+/* File input container */
+.file-input-container {
+  width: 30%; /* Adjust the width as needed */
+}
+
+/* Button styles */
+.btn {
+  padding: 10px 20px;
+  background-color: #218DFA;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+/* Adjust the layout of the button and dropdown */
+.select-btn-container {
+  display: flex;
+  align-items: center;
+}
+
+/* Select styles */
+.inputBox {
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  border: none;
+  margin-bottom: 14px;
+  background: #eee;
+  font-size: 16px;
+  font-weight: bold;
+  width: 100%; /* Adjust the width as needed */
+}

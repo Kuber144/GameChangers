@@ -6,6 +6,7 @@ import "codemirror/mode/javascript/javascript";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import ACTIONS from "../Actions";
+import "codemirror/theme/material.css"
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
   const editorRef = useRef(null);
@@ -16,7 +17,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         document.getElementById("realtimeEditor"),
         {
           mode: { name: "javascript", json: true },
-          theme: "default",
+          theme: "material",
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
@@ -118,19 +119,54 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     }
   }
 
+  // return (
+  //   <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+  //     <textarea id="realtimeEditor"></textarea>
+  //     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  //       <input
+  //         id="filename"
+  //         type="text"
+  //         className="inputBox"
+  //         placeholder="Specify a filename"
+  //       />
+  //       <button className="btn copyBtn" onClick={saveFile}>
+  //         Save File
+  //       </button>
+  //       <input
+  //         style={{ marginTop: "10px", marginBottom: "10px" }}
+  //         type="file"
+  //         id="fileInput"
+  //         className="inputBox"
+  //         onChange={handleFileUpload}
+  //         accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
+  //       />
+  //     </div>
+  //     <div style={{ display: "flex" }}>
+  //       <select id="languageSelect" className="inputBox">
+  //         <option value="javascript">JavaScript</option>
+  //         <option value="python">Python</option>
+  //         <option value="java">Java</option>
+  //         <option value="cpp">C++</option>
+  //         {/* Add more options as needed */}
+  //       </select>
+  //       <textarea
+  //         id="inputArea"
+  //         className="inputBox"
+  //         placeholder="Enter input"
+  //       ></textarea>
+  //       <button className="btn runBtn">Run Code</button>
+  //     </div>
+  //   </div>
+  // );
   return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      <textarea id="realtimeEditor"></textarea>
-      <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-        <input
-          id="filename"
-          type="text"
-          className="inputBox"
-          placeholder="Specify a filename"
-        />
-        <button className="btn copyBtn" onClick={saveFile}>
-          Save File
-        </button>
+    <div
+      style={{
+        height: "calc(100vh - 60px)", // Adjusted height
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      <div style={{ marginBottom: "10px" }}>
         <input
           style={{ marginTop: "10px", marginBottom: "10px" }}
           type="file"
@@ -140,20 +176,46 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
           accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
         />
       </div>
-      <div style={{ display: "flex" }}>
-        <select id="languageSelect" className="inputBox">
+      {/* <div className="CodeMirror ">
+        <textarea id="realtimeEditor"></textarea>
+      </div> */}
+        <div className="CodeMirror" style={{ }}>
+          <textarea id="realtimeEditor"></textarea>
+        </div>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-evenly", marginTop: "10px" }}>
+        <select id="languageSelect" className="inputBox" style={{ marginRight: "10px", flex: "none", width: "150px", marginTop: "10px" }}>
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
           <option value="java">Java</option>
           <option value="cpp">C++</option>
-          {/* Add more options as needed */}
         </select>
         <textarea
           id="inputArea"
           className="inputBox"
           placeholder="Enter input"
+          style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
         ></textarea>
-        <button className="btn runBtn">Run Code</button>
+        <button className="btn" style={{ flex: "none", alignSelf: "flex-start", marginTop: "10px" }}>Run Code</button> {/* Added style to prevent button from expanding */}
+      </div>
+      <div>
+      <textarea
+          id="inputArea"
+          className="inputBox"
+          placeholder="Obtained Output"
+          style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
+        ></textarea>
+      </div>
+      <div style={{ marginBottom: "10px" }}>
+        <input
+          id="filename"
+          type="text"
+          className="inputBox"
+          placeholder="Specify a filename"
+        />
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-evenly", marginBottom: "10px"}}><button className="btn" onClick={saveFile}>
+          Save File
+        </button>
+        </div>
       </div>
     </div>
   );
