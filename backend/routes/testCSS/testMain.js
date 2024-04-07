@@ -74,7 +74,7 @@ export function testCSS(srcDoc, test) {
     if (comparisonType === "between")
       reason = `Expected '${cssElement} to have '${cssProperty}' in between '${cssValue}' and '${value2}''`;
     else
-      reason = `Expected '${computedValue}' for '${cssProperty}' of '${cssElement}' ${comparisonType} '${cssValue}'`;
+      reason = `Expected '${cssValue}' for '${cssProperty}' of '${cssElement}' ${comparisonType} '${computedValue}'`;
   }
 
   // Return pass/fail and reason

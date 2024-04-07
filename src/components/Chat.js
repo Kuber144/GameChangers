@@ -13,7 +13,6 @@ const Chat = ({ socketRef, username }) => {
       };
 
       // Emit the message to the server using socket.io
-
       socketRef.current.emit("chat message", message);
 
       // Update the local messages state

@@ -3,6 +3,7 @@ import axios from "axios";
 import Codemirror from "codemirror";
 import "codemirror/lib/codemirror.css";
 // import "codemirror/theme/dracula.css";
+import "codemirror/mode/python/python";
 import "codemirror/addon/edit/closetag";
 import "codemirror/addon/edit/closebrackets";
 import "codemirror/addon/edit/matchbrackets";
@@ -12,6 +13,7 @@ import "codemirror/mode/meta";
 import "codemirror/theme/material.css";
 import ACTIONS from "../Actions";
 import "codemirror/theme/material.css";
+import "codemirror/mode/clike/clike";
 
 const Editor = ({ socketRef, roomId, onCodeChange }) => {
   const editorRef = useRef(null);
@@ -39,7 +41,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       editorRef.current = Codemirror.fromTextArea(
         document.getElementById("realtimeEditor"),
         {
-          mode: { name: "javascript", json: true },
+          mode: "python",
           theme: "material",
           autoCloseTags: true,
           autoCloseBrackets: true,

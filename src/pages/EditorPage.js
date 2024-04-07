@@ -25,11 +25,18 @@ const EditorPage = () => {
   const [clients, setClients] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("Chat");
   const [selectedTab, setSelectedTab] = useState("chat");
-
+  const [isChatVisible, setIsChatVisible] = useState(true);
+  const [isEditorFullScreen, setIsEditorFullScreen] = useState(false);
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
   };
+  const toggleChatVisibility = () => {
+    setIsChatVisible(!isChatVisible);
+  };
 
+  const toggleEditorFullScreen = () => {
+    setIsEditorFullScreen(!isEditorFullScreen);
+  };
   useEffect(() => {
     const init = async () => {
       socketRef.current = await initSocket();
@@ -98,8 +105,11 @@ const EditorPage = () => {
   }
 
   return (
-    <div className="mainWrap">
-      <div className="aside">
+    <div className={`mainWrap ${isEditorFullScreen ? "fullscreen" : ""}`}>
+      <div
+        className="aside"
+        style={{ display: isEditorFullScreen ? "none" : "block" }}
+      >
         <div className="asideInner">
           <h3>Connected</h3>
           <div className="clientsList">
@@ -115,7 +125,11 @@ const EditorPage = () => {
           Leave
         </button>
       </div>
-      <div className="editorWrap scrollable-content middle-column">
+      <div
+        className={`editorWrap scrollable-content middle-column ${
+          isEditorFullScreen ? "fullscreen" : ""
+        }`}
+      >
         <Editor
           socketRef={socketRef}
           roomId={roomId}
@@ -123,8 +137,11 @@ const EditorPage = () => {
             codeRef.current = code;
           }}
         />
+        <button className="fullscreen-btn" onClick={toggleEditorFullScreen}>
+          {isEditorFullScreen ? "Exit Fullscreen" : "Fullscreen"}
+        </button>
       </div>
-      <div>
+      <div style={{ display: isEditorFullScreen ? "none" : "block" }}>
         <div style={{ height: "50vh" }}>
           <div style={{ display: selectedTab === "chat" ? "block" : "none" }}>
             <Chat socketRef={socketRef} username={location.state?.username} />

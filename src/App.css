@@ -306,6 +306,29 @@ footer a:hover {
   font-size: 16px;
   cursor: pointer;
 }
+.fullscreen {
+  grid-column: span 3; /* Span the editor over two columns */
+}
+
+.hidden {
+  display: none; /* Hide the chat container */
+}
+
+.fullscreen-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #218dfa;
+  color: #fff;
+  cursor: pointer;
+}
+
+.fullscreen-btn:hover {
+  background-color: #0056b3;
+}
 
 .chat-input button:hover {
   background-color: #0056b3;
