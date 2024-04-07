@@ -42,6 +42,13 @@ const Chat = ({ socketRef, username }) => {
   }, [messages, socketRef]);
 
   return (
+    <div
+      style={{
+        height: "calc(100vh - 60px)", // Adjusted height
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
     <div className="chat-container">
       <div className="chat-header">
         <h1>Chat Section : </h1>
@@ -73,6 +80,7 @@ const Chat = ({ socketRef, username }) => {
         />
         <button onClick={handleSendMessage}>Send</button>
       </div>
+    </div>
     </div>
   );
 };
