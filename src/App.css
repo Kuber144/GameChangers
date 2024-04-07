@@ -344,13 +344,38 @@ footer a:hover {
     margin-bottom: 10px;
   }
   
-  .btn {
+  /* .btn {
     padding: 10px 20px;
     background-color: #28a745;
     color: #fff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+  } */
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Assuming 2rem in Tailwind CSS is equivalent to 0.5rem */
+    transition-duration: 0.2s; /* Transition duration in seconds */
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); /* Equivalent to ease-in-out */
+    padding-top: 0.75rem; /* Equivalent to py-3 in Tailwind CSS */
+    padding-bottom: 0.75rem; /* Equivalent to py-3 in Tailwind CSS */
+    border-radius: 0.75rem; /* Equivalent to roundex-xl in Tailwind CSS */
+    font-size: 1rem; /* Equivalent to text-lg in Tailwind CSS */
+    cursor: pointer;
+    color: #fff;
+    background-color: #218DFA;
+  }
+  
+  .btn:hover {
+    transform: scale(1.01); /* Equivalent to hover:scale-[1.01] in Tailwind CSS */
+  }
+  
+  .btn:active {
+    transform: scale(0.98); /* Equivalent to active:scale-[.98] in Tailwind CSS */
+    transition-duration: 0.075s; /* Equivalent to active:duration-75 in Tailwind CSS */
   }
 
   .btn2 {
