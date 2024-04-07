@@ -22,8 +22,10 @@ const Home = () => {
       toast.error("Editor ID , username & email is required");
       return;
     }
-    if (email === "meghanapedduri@gmail.com") {
-      toast.error("Sorry you do not have the permission");
+    // Basic email validation using regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toast.error("Please enter a valid email address");
       return;
     }
 
@@ -40,6 +42,12 @@ const Home = () => {
       joinEditor();
     }
   };
+
+  const testCode = () => {
+    // Open a new tab with the specified URL
+    window.open("http://localhost:3001", "_blank");
+  };
+
   return (
     <div className="homePageWrapper">
       <div className="formWrapper">
@@ -69,9 +77,14 @@ const Home = () => {
             value={email}
             onKeyUp={handleInputEnter}
           />
-          <button className="btn joinBtn" onClick={joinEditor}>
-            Join
-          </button>
+          <div style={{ display: "flex", flexDirection: "row", gap: "10px" }}>
+            <button className="btn joinBtn" onClick={joinEditor}>
+              Join
+            </button>
+            <button className="btn jonBtn" onClick={testCode}>
+              Test Code
+            </button>
+          </div>
           <span className="createInfo">
             If you don't have an invite then create &nbsp;
             <a onClick={createNewEditor} href="" className="createNewBtn">

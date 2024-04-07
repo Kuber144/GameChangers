@@ -160,14 +160,16 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       });
       const resData = await response.json();
       // console.log(atob(resData.output.stdout));
-      // console.log(resData);
+      console.log(resData);
       let output = "";
       if (resData.output.stderr) {
         // If stderr is present, display the error message
         output = atob(resData.output.stderr);
-      } else {
+      } else if (resData.output.stdout) {
         // Otherwise, display the standard output
         output = atob(resData.output.stdout);
+      } else {
+        output = resData.output.status.description;
       }
       document.getElementById("outputArea").value = output;
     } catch (error) {

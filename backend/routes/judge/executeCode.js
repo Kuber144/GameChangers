@@ -11,7 +11,7 @@ async function executeCode(code, languageId, input) {
   const requestBody = {
     source_code: Buffer.from(code).toString("base64"),
     language_id: languageId,
-    stdin: input,
+    stdin: Buffer.from(input).toString("base64"),
   };
 
   try {
