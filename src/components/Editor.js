@@ -159,108 +159,21 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         body: JSON.stringify({ code, languageId, input }),
       });
       const resData = await response.json();
-      console.log(atob(resData.output.stdout));
-      setModalBody(atob(resData.output.stdout));
-      handleShowModal();
+      // console.log(atob(resData.output.stdout));
+      // console.log(resData);
+      let output = "";
+      if (resData.output.stderr) {
+        // If stderr is present, display the error message
+        output = atob(resData.output.stderr);
+      } else {
+        // Otherwise, display the standard output
+        output = atob(resData.output.stdout);
+      }
+      document.getElementById("outputArea").value = output;
     } catch (error) {
       console.error("Error executing code:", error);
     }
   };
-  // return (
-  //   <>
-  //     <CenteredModal
-  //       show={modalShow}
-  //       onHide={handleCloseModal}
-  //       body={modalBody}
-  //     />
-  //     <div
-  //       style={{ height: "100vh", display: "flex", flexDirection: "column" }}
-  //     >
-  //       <textarea id="realtimeEditor"></textarea>
-  //       <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-  //         <input
-  //           id="filename"
-  //           type="text"
-  //           className="inputBox"
-  //           placeholder="Specify a filename"
-  //         />
-  //         <button className="btn copyBtn" onClick={saveFile}>
-  //           Save File
-  //         </button>
-  //         <input
-  //           style={{ marginTop: "10px", marginBottom: "10px" }}
-  //           type="file"
-  //           id="fileInput"
-  //           className="inputBox"
-  //           onChange={handleFileUpload}
-  //           accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
-  //         />
-  //       </div>
-  //       <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-  //         <select
-  //           id="languageSelect"
-  //           className="inputBox"
-  //           onChange={(e) => {
-  //             setSelectedLanguage(e.target.value);
-  //           }}
-  //         >
-  //           {languages.map((language) => (
-  //             <option key={language.id} value={language.id}>
-  //               {language.name}
-  //             </option>
-  //           ))}
-  //         </select>
-  //         <textarea
-  //           id="inputArea"
-  //           className="inputBox"
-  //           placeholder="Enter input"
-  //         ></textarea>
-  //         <button className="btn runBtn" onClick={executeCode}>
-  //           Run Code
-  //         </button>
-  //       </div>
-  //     </div>
-  //   </>
-
-  // return (
-  //   <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-  //     <textarea id="realtimeEditor"></textarea>
-  //     <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-  //       <input
-  //         id="filename"
-  //         type="text"
-  //         className="inputBox"
-  //         placeholder="Specify a filename"
-  //       />
-  //       <button className="btn copyBtn" onClick={saveFile}>
-  //         Save File
-  //       </button>
-  //       <input
-  //         style={{ marginTop: "10px", marginBottom: "10px" }}
-  //         type="file"
-  //         id="fileInput"
-  //         className="inputBox"
-  //         onChange={handleFileUpload}
-  //         accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
-  //       />
-  //     </div>
-  //     <div style={{ display: "flex" }}>
-  //       <select id="languageSelect" className="inputBox">
-  //         <option value="javascript">JavaScript</option>
-  //         <option value="python">Python</option>
-  //         <option value="java">Java</option>
-  //         <option value="cpp">C++</option>
-  //         {/* Add more options as needed */}
-  //       </select>
-  //       <textarea
-  //         id="inputArea"
-  //         className="inputBox"
-  //         placeholder="Enter input"
-  //       ></textarea>
-  //       <button className="btn runBtn">Run Code</button>
-  //     </div>
-  //   </div>
-  // );
   return (
     <div
       style={{
@@ -302,11 +215,15 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
             width: "150px",
             marginTop: "10px",
           }}
+          onChange={(e) => {
+            setSelectedLanguage(e.target.value);
+          }}
         >
-          <option value="javascript">JavaScript</option>
-          <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="cpp">C++</option>
+          {languages.map((language) => (
+            <option key={language.id} value={language.id}>
+              {language.name}
+            </option>
+          ))}
         </select>
         <textarea
           id="inputArea"
@@ -317,6 +234,7 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
         <button
           className="btn"
           style={{ flex: "none", alignSelf: "flex-start", marginTop: "10px" }}
+          onClick={executeCode}
         >
           Run Code
         </button>{" "}
@@ -324,10 +242,11 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       </div>
       <div>
         <textarea
-          id="inputArea"
+          id="outputArea"
           className="inputBox"
           placeholder="Obtained Output"
           style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
+          readOnly
         ></textarea>
       </div>
       <div style={{ marginBottom: "10px" }}>

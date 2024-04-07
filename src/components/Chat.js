@@ -44,43 +44,43 @@ const Chat = ({ socketRef, username }) => {
   return (
     <div
       style={{
-        height: "calc(100vh - 60px)", // Adjusted height
+        height: "100vh", // Adjusted height
         display: "flex",
         flexDirection: "column",
       }}
     >
-    <div className="chat-container">
-      <div className="chat-header">
-        <h1>Chat Section : </h1>
+      <div className="chat-container">
+        <div className="chat-header">
+          <h1>Chat Section : </h1>
+        </div>
+        <div className="chat-messages-container">
+          {messages.length === 0 ? (
+            <p className="no-messages">Send a message to join the chat</p>
+          ) : (
+            <div className="chat-messages">
+              <ul>
+                {messages.map((message, index) => (
+                  <li key={index} className="chat-message">
+                    <div className="message-info">
+                      <strong>{message.username}</strong> ({message.timestamp}):
+                    </div>
+                    <div className="message-text">{message.text}</div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+        <div className="chat-input">
+          <input
+            type="text"
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+          />
+          <button onClick={handleSendMessage}>Send</button>
+        </div>
       </div>
-      <div className="chat-messages-container">
-        {messages.length === 0 ? (
-          <p className="no-messages">Send a message to join the chat</p>
-        ) : (
-          <div className="chat-messages">
-            <ul>
-              {messages.map((message, index) => (
-                <li key={index} className="chat-message">
-                  <div className="message-info">
-                    <strong>{message.username}</strong> ({message.timestamp}):
-                  </div>
-                  <div className="message-text">{message.text}</div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
-      <div className="chat-input">
-        <input
-          type="text"
-          placeholder="Type your message..."
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-        />
-        <button onClick={handleSendMessage}>Send</button>
-      </div>
-    </div>
     </div>
   );
 };
