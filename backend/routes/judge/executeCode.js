@@ -30,7 +30,7 @@ async function executeCode(code, languageId, input) {
     }
   } catch (error) {
     console.error("Error executing code:", error);
-    return { error: "Failed to execute code" };
+    return res.status(400).json({ error: "Failed to execute code" });
   }
 }
 

@@ -3,6 +3,8 @@ import connectToMongo from "./db.js";
 import cors from "cors";
 import judgeRouterLang from "./routes/judge/getLangs.js";
 import judgeRouterCode from "./routes/judge/executeCode.js";
+import TestRoute from "./routes/testData.js";
+import TestCode from "./routes/testCode.js"; //import api's
 import bodyParser from "body-parser";
 connectToMongo();
 const app = express();
@@ -16,6 +18,8 @@ app.get("/", (req, res) => {
 });
 app.use("/judge", judgeRouterLang);
 app.use("/judge", judgeRouterCode);
+app.use("/api", TestRoute); // Adding and Fetching the test
+app.use("/test", TestCode); //For testing the code
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

@@ -3,7 +3,6 @@ const cors = require("cors");
 const app = express();
 const http = require("http");
 const path = require("path");
-const judgelangs = require("./src/components/GetJudgeLangs");
 const { Server } = require("socket.io");
 const ACTIONS = require("./src/Actions");
 app.use(cors());
@@ -15,7 +14,6 @@ app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
-app.use("/judge", judgelangs);
 const userSocketMap = {};
 function getAllConnectedClients(roomId) {
   // Map

@@ -1,45 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
-const Chat = ({ socketRef, username }) => {
+const ChatAI = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [error, setError] = useState(null);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim() !== "") {
       const message = {
         text: newMessage,
-        username: username,
+        username: "User",
         timestamp: new Date().toLocaleTimeString(),
       };
 
-      // Emit the message to the server using socket.io
-
-      socketRef.current.emit("chat message", message);
-
-      // Update the local messages state
-      setMessages([...messages, message]);
-
-      // Clear the input field
-      setNewMessage("");
+      try {
+        const response = await axios.post("/api/chat", { message });
+        setMessages([
+          ...messages,
+          message,
+          {
+            text: response.data.text,
+            username: "AI",
+            timestamp: new Date().toLocaleTimeString(),
+          },
+        ]);
+        setNewMessage("");
+        setError(null); // Clear any previous errors
+      } catch (error) {
+        console.error("Error sending message:", error);
+        setError("Failed to send message. Please try again."); // Set error message
+      }
     }
   };
-
-  // Listen for incoming messages from the server
-  useEffect(() => {
-    if (socketRef.current) {
-      socketRef.current.on("chat message", (message) => {
-        console.log(
-          "Message ka username ",
-          message.username,
-          " username ",
-          username
-        );
-        if (message.username !== username) {
-          setMessages([...messages, message]);
-        }
-      });
-    }
-  }, [messages, socketRef]);
 
   return (
     <div className="chat-container">
@@ -47,8 +40,10 @@ const Chat = ({ socketRef, username }) => {
         <h1>Chat Section : </h1>
       </div>
       <div className="chat-messages-container">
-        {messages.length === 0 ? (
-          <p className="no-messages">Send a message to join the chat</p>
+        {error ? (
+          <p className="error-message">{error}</p> // Display error message
+        ) : messages.length === 0 ? (
+          <p className="no-messages">Chat with AI</p>
         ) : (
           <div className="chat-messages">
             <ul>
@@ -77,4 +72,4 @@ const Chat = ({ socketRef, username }) => {
   );
 };
 
-export default Chat;
+export default ChatAI;
