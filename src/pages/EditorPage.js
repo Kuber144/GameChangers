@@ -8,6 +8,7 @@ import ChatAI from "../components/ChatWithAI";
 import FileUpload from "../components/FileUpload";
 import { initSocket } from "../socket";
 import BottomNavigation from "../components/BottomNavigation";
+import "../App.css";
 import {
   useLocation,
   useNavigate,
