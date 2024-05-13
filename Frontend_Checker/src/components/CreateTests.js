@@ -62,13 +62,16 @@ export default function CreateTests() {
     console.log("Formatted Tests:", formattedTests);
     // Reset form fields
     try {
-      const response = await fetch("http://localhost:8000/api/addtest", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formattedTests),
-      });
+      const response = await fetch(
+        "https://game-changers.vercel.app/api/addtest",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formattedTests),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to save tests");
       }

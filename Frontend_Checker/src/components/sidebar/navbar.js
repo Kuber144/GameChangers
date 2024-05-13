@@ -31,19 +31,22 @@ function Navbar({ srcDOC, html, css, js }) {
     if (selectedTestIndex === null) return; // Return if no test is selected
     try {
       const title = testData[selectedTestIndex].title;
-      const response = await fetch("http://localhost:8000/test/testcode", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          srcDOC,
-          html,
-          css,
-          js,
-        }),
-      });
+      const response = await fetch(
+        "https://game-changers.vercel.app/test/testcode",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title,
+            srcDOC,
+            html,
+            css,
+            js,
+          }),
+        }
+      );
       if (!response.ok) {
         throw new Error("Failed to run test on backend");
       }
@@ -59,7 +62,9 @@ function Navbar({ srcDOC, html, css, js }) {
   useEffect(() => {
     const fetchTestData = async () => {
       try {
-        const response = await fetch("http://localhost:8000/api/fetchtest");
+        const response = await fetch(
+          "https://game-changers.vercel.app/api/fetchtest"
+        );
         if (!response.ok) {
           throw new Error("Failed to fetch test data");
         }
