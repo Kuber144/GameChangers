@@ -35,7 +35,7 @@ const router = express.Router();
 // }
 async function executeCode(code, languageId, input) {
   const url =
-    "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&fields=*";
+    "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=true";
   const options = {
     method: "POST",
     headers: {

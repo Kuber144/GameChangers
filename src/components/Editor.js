@@ -27,7 +27,9 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
   useEffect(() => {
     async function fetchLanguages() {
       try {
-        const response = await axios.get("http://localhost:8000/judge/getlang");
+        const response = await axios.get(
+          "https://game-changers.vercel.app/judge/getlang"
+        );
         setLanguages(response.data);
       } catch (error) {
         console.error("Error fetching languages:", error);
@@ -195,16 +197,19 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
       const code = editorRef.current.getValue();
       const languageId = selectedLanguage; // Assuming selectedLanguage is the ID of the selected language
       const input = document.getElementById("inputArea").value;
-      const response = await fetch("http://localhost:8000/judge/execute", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ code, languageId, input }),
-      });
+      const response = await fetch(
+        "https://game-changers.vercel.app/judge/execute",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ code, languageId, input }),
+        }
+      );
       const resData = await response.json();
       // console.log(atob(resData.output.stdout));
-      console.log(resData);
+      console.log(resData.output);
       let output = "";
       if (resData.output.stderr) {
         // If stderr is present, display the error message

@@ -45,7 +45,7 @@ const Home = () => {
 
   const testCode = () => {
     // Open a new tab with the specified URL
-    window.open("http://localhost:3001", "_blank");
+    window.open("https://game-changers-wrks.vercel.app/", "_blank");
   };
 
   return (
