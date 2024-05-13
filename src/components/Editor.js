@@ -15,7 +15,7 @@ import ACTIONS from "../Actions";
 import "codemirror/theme/material.css";
 import "codemirror/mode/clike/clike";
 
-const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
+const Editor = ({ socketRef, roomId, onCodeChange }) => {
   const editorRef = useRef(null);
   const [languages, setLanguages] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState(45);
@@ -49,7 +49,7 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
         document.getElementById("realtimeEditor"),
         {
           mode: "python",
-          theme: isDarkMode ? "material" : "dracula",
+          theme: "material",
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
@@ -75,41 +75,6 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
     }
     init();
   }, []);
-  useEffect(() => {
-    async function init() {
-      editorRef.current = Codemirror.fromTextArea(
-        document.getElementById("realtimeEditor"),
-        {
-          mode: "python",
-          theme: isDarkMode ? "material" : "dracula",
-          autoCloseTags: true,
-          autoCloseBrackets: true,
-          lineNumbers: true,
-          styleActiveLine: true,
-          matchBrackets: true,
-          matchTags: true,
-          lineWrapping: true,
-          indentUnit: 4,
-        }
-      );
-
-      editorRef.current.on("change", (instance, changes) => {
-        const { origin } = changes;
-        const code = instance.getValue();
-        onCodeChange(code);
-        if (origin !== "setValue") {
-          socketRef.current.emit(ACTIONS.CODE_CHANGE, {
-            roomId,
-            code,
-          });
-        }
-      });
-    }
-    // const var=Document.getElementById("realtimeEditor").value;
-    const code = editorRef.current.getValue();
-    init();
-    editorRef.current.value = code;
-  }, [isDarkMode]);
 
   useEffect(() => {
     if (socketRef.current) {
@@ -190,8 +155,6 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
       console.error(`Button with ID "${buttonId}" not found.`);
     }
   }
-  const lightModeStyles = {};
-  const editorStyles = isDarkMode ? darkModeStyles : lightModeStyles;
   const executeCode = async () => {
     try {
       const code = editorRef.current.getValue();
@@ -226,7 +189,7 @@ const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
     }
   };
   return (
-    <div style={{ editorStyles }}>
+    <div>
       <div
         style={{
           height: "calc(100vh - 60px)", // Adjusted height

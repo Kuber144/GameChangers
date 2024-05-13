@@ -24,7 +24,6 @@ const EditorPage = () => {
   const reactNavigator = useNavigate();
   const [clients, setClients] = useState([]);
   const [selectedComponent, setSelectedComponent] = useState("Chat");
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedTab, setSelectedTab] = useState("chat");
   const [isChatVisible, setIsChatVisible] = useState(true);
   const [isEditorFullScreen, setIsEditorFullScreen] = useState(false);
@@ -33,9 +32,6 @@ const EditorPage = () => {
   };
   const toggleChatVisibility = () => {
     setIsChatVisible(!isChatVisible);
-  };
-  const toggleDarkMode = () => {
-    setIsDarkMode((prevMode) => !prevMode);
   };
   const toggleEditorFullScreen = () => {
     setIsEditorFullScreen(!isEditorFullScreen);
@@ -123,13 +119,6 @@ const EditorPage = () => {
             ))}
           </div>
         </div>
-        <button
-          style={{ marginBottom: "10px", marginTop: "10px" }}
-          className="btn copyBtn"
-          onClick={toggleDarkMode}
-        >
-          {isDarkMode ? "Light Mode" : "Dark Mode"}
-        </button>
         <button className="btn copyBtn" onClick={copyRoomId}>
           Copy Editor ID
         </button>
@@ -148,7 +137,6 @@ const EditorPage = () => {
           onCodeChange={(code) => {
             codeRef.current = code;
           }}
-          isDarkMode={isDarkMode}
         />
         <button className="fullscreen-btn" onClick={toggleEditorFullScreen}>
           {isEditorFullScreen ? "Exit Fullscreen" : "Fullscreen"}
