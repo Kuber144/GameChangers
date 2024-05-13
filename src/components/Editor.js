@@ -15,7 +15,7 @@ import ACTIONS from "../Actions";
 import "codemirror/theme/material.css";
 import "codemirror/mode/clike/clike";
 
-const Editor = ({ socketRef, roomId, onCodeChange }) => {
+const Editor = ({ socketRef, roomId, onCodeChange, isDarkMode }) => {
   const editorRef = useRef(null);
   const [languages, setLanguages] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState(45);
@@ -35,14 +35,19 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     }
     fetchLanguages();
   }, []);
+  const darkModeStyles = {
+    backgroundColor: "#333",
+    color: "#fff",
 
+    // Add other dark mode styles here
+  };
   useEffect(() => {
     async function init() {
       editorRef.current = Codemirror.fromTextArea(
         document.getElementById("realtimeEditor"),
         {
           mode: "python",
-          theme: "material",
+          theme: isDarkMode ? "material" : "dracula",
           autoCloseTags: true,
           autoCloseBrackets: true,
           lineNumbers: true,
@@ -68,6 +73,41 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     }
     init();
   }, []);
+  useEffect(() => {
+    async function init() {
+      editorRef.current = Codemirror.fromTextArea(
+        document.getElementById("realtimeEditor"),
+        {
+          mode: "python",
+          theme: isDarkMode ? "material" : "dracula",
+          autoCloseTags: true,
+          autoCloseBrackets: true,
+          lineNumbers: true,
+          styleActiveLine: true,
+          matchBrackets: true,
+          matchTags: true,
+          lineWrapping: true,
+          indentUnit: 4,
+        }
+      );
+
+      editorRef.current.on("change", (instance, changes) => {
+        const { origin } = changes;
+        const code = instance.getValue();
+        onCodeChange(code);
+        if (origin !== "setValue") {
+          socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+            roomId,
+            code,
+          });
+        }
+      });
+    }
+    // const var=Document.getElementById("realtimeEditor").value;
+    const code = editorRef.current.getValue();
+    init();
+    editorRef.current.value = code;
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (socketRef.current) {
@@ -148,6 +188,8 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
       console.error(`Button with ID "${buttonId}" not found.`);
     }
   }
+  const lightModeStyles = {};
+  const editorStyles = isDarkMode ? darkModeStyles : lightModeStyles;
   const executeCode = async () => {
     try {
       const code = editorRef.current.getValue();
@@ -179,98 +221,100 @@ const Editor = ({ socketRef, roomId, onCodeChange }) => {
     }
   };
   return (
-    <div
-      style={{
-        height: "calc(100vh - 60px)", // Adjusted height
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <div style={{ marginBottom: "10px" }}>
-        <input
-          style={{ marginTop: "10px", marginBottom: "10px" }}
-          type="file"
-          id="fileInput"
-          className="inputBox"
-          onChange={handleFileUpload}
-          accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
-        />
-      </div>
-      {/* <div className="CodeMirror ">
-        <textarea id="realtimeEditor"></textarea>
-      </div> */}
-      <div className="CodeMirror" style={{}}>
-        <textarea id="realtimeEditor"></textarea>
-      </div>
+    <div style={{ editorStyles }}>
       <div
         style={{
+          height: "calc(100vh - 60px)", // Adjusted height
           display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-evenly",
-          marginTop: "10px",
+          flexDirection: "column",
         }}
       >
-        <select
-          id="languageSelect"
-          className="inputBox"
-          style={{
-            marginRight: "10px",
-            flex: "none",
-            width: "150px",
-            marginTop: "10px",
-          }}
-          onChange={(e) => {
-            setSelectedLanguage(e.target.value);
-          }}
-        >
-          {languages.map((language) => (
-            <option key={language.id} value={language.id}>
-              {language.name}
-            </option>
-          ))}
-        </select>
-        <textarea
-          id="inputArea"
-          className="inputBox"
-          placeholder="Enter input"
-          style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
-        ></textarea>
-        <button
-          className="btn"
-          style={{ flex: "none", alignSelf: "flex-start", marginTop: "10px" }}
-          onClick={executeCode}
-        >
-          Run Code
-        </button>{" "}
-        {/* Added style to prevent button from expanding */}
-      </div>
-      <div>
-        <textarea
-          id="outputArea"
-          className="inputBox"
-          placeholder="Obtained Output"
-          style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
-          readOnly
-        ></textarea>
-      </div>
-      <div style={{ marginBottom: "10px" }}>
-        <input
-          id="filename"
-          type="text"
-          className="inputBox"
-          placeholder="Specify a filename"
-        />
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            style={{ marginTop: "10px", marginBottom: "10px" }}
+            type="file"
+            id="fileInput"
+            className="inputBox"
+            onChange={handleFileUpload}
+            accept=".js, .txt, .html, .java, .cpp, .c, .py" // Specify the allowed file types
+          />
+        </div>
+        {/* <div className="CodeMirror ">
+        <textarea id="realtimeEditor"></textarea>
+      </div> */}
+        <div className="CodeMirror" style={{}}>
+          <textarea id="realtimeEditor"></textarea>
+        </div>
         <div
           style={{
             display: "flex",
             alignItems: "flex-start",
             justifyContent: "space-evenly",
-            marginBottom: "10px",
+            marginTop: "10px",
           }}
         >
-          <button className="btn" onClick={saveFile}>
-            Save File
-          </button>
+          <select
+            id="languageSelect"
+            className="inputBox"
+            style={{
+              marginRight: "10px",
+              flex: "none",
+              width: "150px",
+              marginTop: "10px",
+            }}
+            onChange={(e) => {
+              setSelectedLanguage(e.target.value);
+            }}
+          >
+            {languages.map((language) => (
+              <option key={language.id} value={language.id}>
+                {language.name}
+              </option>
+            ))}
+          </select>
+          <textarea
+            id="inputArea"
+            className="inputBox"
+            placeholder="Enter input"
+            style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
+          ></textarea>
+          <button
+            className="btn"
+            style={{ flex: "none", alignSelf: "flex-start", marginTop: "10px" }}
+            onClick={executeCode}
+          >
+            Run Code
+          </button>{" "}
+          {/* Added style to prevent button from expanding */}
+        </div>
+        <div>
+          <textarea
+            id="outputArea"
+            className="inputBox"
+            placeholder="Obtained Output"
+            style={{ resize: "none", marginRight: "10px", flex: "1" }} // Added style to disable resizing and set flex to "1"
+            readOnly
+          ></textarea>
+        </div>
+        <div style={{ marginBottom: "10px" }}>
+          <input
+            id="filename"
+            type="text"
+            className="inputBox"
+            placeholder="Specify a filename"
+          />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-evenly",
+              marginBottom: "10px",
+            }}
+          >
+            <button className="btn" onClick={saveFile}>
+              Save File
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -4,10 +4,16 @@ import express from "express";
 const router = express.Router();
 
 async function getSupportedLanguages() {
-  const apiUrl = "http://localhost:2358/languages";
-
+  const apiUrl = "https://judge0-ce.p.rapidapi.com/languages";
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": "65ad936127mshedf86edc75d8c1ep168abbjsncdd542314f0b",
+      "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+    },
+  };
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, options);
     const languages = await response.json();
     return languages;
   } catch (error) {
